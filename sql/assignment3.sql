@@ -151,3 +151,49 @@ from Customers c
 join Accounts a on c.customer_id=a.customer_id
 join Transactions t on a.account_id=t.account_id
 where amount=1000
+
+select * from Customers
+select * from Accounts
+select * from Transactions
+--8.Write a SQL query to Identify customers who have more than one account.
+select c.customer_id, count(a.account_id) as account_count
+from Customers c
+join Accounts a on c.customer_id=a.customer_id
+group by c.customer_id
+having count(a.account_id)>1
+
+--9. write a SQL query to Calculate the difference in transaction amounts between deposits and withdrawals
+
+
+--10. Write a SQL query to Calculate the average daily balance for each account over a specified period. 
+select a.account_id, AVG(a.balance) as averageBalance
+from Accounts a
+join Transactions t on a.account_id=t.account_id
+where transaction_date between '2025-03-21' and '2025-03-25'
+group by a.account_id
+
+--11. Calculate the total balance for each account type.
+select account_type, sum(balance) as totalBalance
+from Accounts
+group by account_type
+
+--12. Identify accounts with the highest number of transactions order by descending order
+select a.account_id, count(t.transaction_id) as transactionCount
+from Accounts a
+join Transactions t on a.account_id=t.account_id
+group by a.account_id
+order by transactionCount desc
+
+--13. List customers with high aggregate account balances, along with their account types
+select c.first_name, sum(a.balance) as totalBalance, a.account_type
+from Customers c
+join Accounts a on c.customer_id=a.customer_id
+group by c.first_name, a.account_type
+
+select * from Customers
+select * from Accounts
+select * from Transactions
+--14. Identify and list duplicate transactions based on transaction amount, date, and account.
+select account_id, amount, transaction_date, COUNT(*) AS duplicateCount from Transactions
+group by account_id, amount, transaction_date
+having COUNT(*) > 1
