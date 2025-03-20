@@ -159,11 +159,15 @@ set email='harrish7@gmail.com', Address='007, chennai'
 where CustomerID=1
 
 -- 8. Write an SQL query to recalculate and update the total cost of each order in the "Orders" 
--- table based on the prices and quantities in the "OrderDetails" table.
-
+select orderId, sum(totalAmount) as totalCost
+from Orders
+group by orderId
 
 -- 9. Write an SQL query to delete all orders and their associated order details for a specific 
--- customer from the "Orders" and "OrderDetails" tables. Allow users to input the customer ID as a parameter.
+-- customer from the "Orders". Allow users to input the customer ID as a parameter.
+delete from orders
+where customerId=5
+
 
 -- 10. Write an SQL query to insert a new electronic gadget product into the "Products" table, 
 -- including product name, category, price, and any other relevant details. 
@@ -185,6 +189,11 @@ where status is null
 -- 12. Write an SQL query to calculate and update the number of orders placed by each customer 
 -- in the "Customers" table based on the data in the "Orders" table
 -- write a query to display the number of orders placed by each customer
+select c.firstName, count(o.orderId) as NumberOfOrders
+from customers c
+join orders o on c.customerId=o.customerId
+group by c.firstName
+
 
 
 SELECT * FROM Customers
@@ -264,6 +273,13 @@ SELECT * FROM Orders
 
 --9. Write an SQL query to find customers who have purchased a specific electronic gadget product. 
 --Allow users to input the product name as a parameter.
+
+select c.CustomerID, c.FirstName
+from Customers c
+join Orders o ON c.CustomerID = o.CustomerID
+join OrderDetails od ON o.OrderID = od.OrderID
+join Products p ON od.ProductID = p.ProductID
+WHERE p.ProductName = 'Laptop';
 
 
 SELECT * FROM Customers
