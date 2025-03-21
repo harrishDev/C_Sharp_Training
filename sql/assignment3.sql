@@ -163,7 +163,15 @@ group by c.customer_id
 having count(a.account_id)>1
 
 --9. write a SQL query to Calculate the difference in transaction amounts between deposits and withdrawals
-
+SELECT 
+    a.account_id,
+    SUM(CASE WHEN t.transaction_type = 'Deposit' THEN t.amount ELSE 0 END) AS total_deposits,
+    SUM(CASE WHEN t.transaction_type = 'Withdrawal' THEN t.amount ELSE 0 END) AS total_withdrawals,
+    SUM(CASE WHEN t.transaction_type = 'Deposit' THEN t.amount ELSE 0 END) - 
+    SUM(CASE WHEN t.transaction_type = 'Withdrawal' THEN t.amount ELSE 0 END) AS transaction_difference
+FROM Transactions t
+JOIN Accounts a ON t.account_id = a.account_id
+GROUP BY a.account_id;
 
 --10. Write a SQL query to Calculate the average daily balance for each account over a specified period. 
 select a.account_id, AVG(a.balance) as averageBalance
