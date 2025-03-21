@@ -205,3 +205,69 @@ select * from Transactions
 select account_id, amount, transaction_date, COUNT(*) AS duplicateCount from Transactions
 group by account_id, amount, transaction_date
 having COUNT(*) > 1
+
+--task4:
+--1. Retrieve the customer(s) with the highest account balance
+select * from Customers where customer_id in (
+select customer_id from Accounts where balance = (
+select max(balance) from Accounts)
+)
+
+--2. Calculate the average account balance for customers who have more than one account.
+select AVG(balance) as averageAccountBalance from Accounts where customer_id IN (
+select customer_id from Accounts
+group by customer_id
+having count(account_id) > 1)
+
+--3. Retrieve accounts with transactions whose amounts exceed the average transaction amount.
+select * from Transactions 
+where amount > 
+(select AVG(amount) FROM Transactions)
+
+
+select * from Customers
+select * from Accounts
+select * from Transactions
+--4. Identify customers who have no recorded transactions.
+select * FROM Customers WHERE customer_id NOT IN 
+(select distinct customer_id FROM Accounts 
+JOIN Transactions ON Accounts.account_id = Transactions.account_id);
+
+--5. Calculate the total balance of accounts with no recorded transactions.
+select SUM(balance) FROM Accounts
+WHERE account_id NOT IN 
+(select distinct account_id 
+FROM Transactions);
+
+--6. Retrieve transactions for accounts with the lowest balance
+select * from Transactions 
+where account_id IN 
+(select account_id 
+from Accounts 
+where balance = (
+select MIN(balance) 
+from Accounts))
+
+--7. Identify customers who have accounts of multiple types. 
+select customer_id from Accounts 
+group by customer_id
+having COUNT(distinct account_type) > 1;
+
+--8. Calculate the percentage of each account type out of the total number of accounts.
+select account_type, COUNT(*) * 100.0 / (select COUNT(*) from Accounts) AS percentage 
+from Accounts 
+group by account_type;
+
+--9. Retrieve all transactions for a customer with a given customer_id. 
+select * from Transactions
+where account_id in (
+select account_id from Accounts
+where customer_id=1)
+
+--10.  Calculate the total balance for each account type, including a subquery within the SELECT clause. 
+
+select account_type, (select SUM(balance) 
+from Accounts A 
+where A.account_type = Accounts.account_type) AS total_balance 
+from Accounts 
+group by account_type;
