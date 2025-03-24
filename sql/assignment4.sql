@@ -166,6 +166,160 @@ WHERE PaymentDate < '2025-06-30'
 GROUP BY LocationID
 HAVING SUM(Amount) > 5000
 
+--task4
+--23. Retrieve Payments with Courier Information  
+SELECT Payment.*, Courier.*
+FROM Payment
+INNER JOIN Courier ON Payment.CourierID = Courier.CourierID
+
+--24.  Retrieve Payments with Location Information
+select payment.*, location.*
+from payment
+inner join location on payment.locationid = location.locationid;
+
+--25. Retrieve Payments with Courier and Location Information  
+select payment.*, courier.*, location.*
+from payment
+inner join courier on payment.courierid = courier.courierid
+inner join location on payment.locationid = location.locationid;
+
+--26. List all payments with courier details  
+select payment.*, courier.*
+from payment
+left outer join courier on payment.courierid = courier.courierid;
+
+--27.Total payments received for each courier 
+select courierid, sum(amount) as totalpayments
+from payment
+group by courierid;
+
+--28.List payments made on a specific date  
+select * from payment
+where paymentdate = '2025-12-12';
+
+--29. Get Courier Information for Each Payment 
+select payment.*, courier.*
+from payment
+inner join courier on payment.courierid = courier.courierid;
+
+--30.  Get Payment Details with Location 
+select payment.*, location.*
+from payment
+inner join location on payment.locationid = location.locationid;
+
+--31.Calculating Total Payments for Each Courier
+select courierid, sum(amount) as totalpayments
+from payment
+group by courierid;
+
+--32. List Payments Within a Date Range  
+select * from payment
+where paymentdate between '2025-01-01' and '2025-03-01';
+
+--33. Retrieve a list of all users and their corresponding courier records, including cases where there are no matches on either side
+select users.*, courier.*
+from users
+full outer join courier on users.userid = courier.courierid;
+
+--34.Retrieve a list of all couriers and their corresponding services, including cases where there are no matches on either side  
+select courier.*, courierservices.*
+from courier
+full outer join courierservices on courier.courierid = courierservices.serviceid;
+
+--35. Retrieve a list of all employees and their corresponding payments, including cases where there are no matches on either side
+select employee.*, payment.*
+from employee
+full outer join payment on employee.employeeid = payment.courierid;
+
+--36. List all users and all courier services, showing all possible combinations
+select users.*, courierservices.*
+from users
+cross join courierservices;
+
+--37.List all employees and all locations, showing all possible combinations: 
+select employee.*, location.*
+from employee
+cross join location;
+
+--38.Retrieve a list of couriers and their corresponding sender information (if available)
+select courier.*, courier.sendername, courier.senderaddress
+from courier;
+
+--39.Retrieve a list of couriers and their corresponding receiver information (if available):  
+select courier.*, courier.receivername, courier.receiveraddress
+from courier;
+
+--40.. Retrieve a list of couriers along with the courier service details (if available):  
+select courier.*, courierservices.*
+from courier
+left outer join courierservices on courier.courierid = courierservices.serviceid;
+
+--41.Retrieve a list of employees and the number of couriers assigned to each employee:  
+select courier.*, courierservices.*
+from courier
+left outer join courierservices on courier.courierid = courierservices.serviceid;
+
+--42. Retrieve a list of locations and the total payment amount received at each location: 
+select location.locationid, location.locationname, sum(payment.amount) as totalpayments
+from location
+left outer join payment on location.locationid = payment.locationid
+group by location.locationid, location.locationname;
+
+--43.. Retrieve all couriers sent by the same sender (based on SenderName). 
+select * from courier
+where sendername = 'sai'; 
+
+--44.. List all employees who share the same role.
+select * from employee
+where role = 'developer';
+
+--45. Retrieve all payments made for couriers sent from the same location.  
+select payment.*
+from payment
+inner join courier on payment.courierid = courier.courierid
+where cast(courier.senderaddress as varchar(255)) = 'chennai'; 
+
+--46. Retrieve all couriers sent from the same location (based on SenderAddress). 
+select * from courier
+where cast(senderaddress as varchar(255)) = 'dubai'
+
+--47.. List employees and the number of couriers they have delivered:  
+
+--48.  Find couriers that were paid an amount greater than the cost of their respective courier services
+select courier.*
+from courier
+inner join payment on courier.courierid = payment.courierid
+inner join courierservices on courier.courierid = courierservices.serviceid
+where payment.amount > courierservices.cost;
+
+--49. Find couriers that have a weight greater than the average weight of all couriers  
+select * from courier
+where weight > (select avg(weight) from courier);
+
+--50.Find the names of all employees who have a salary greater than the average salary:  
+select name from employee
+where salary > (select avg(salary) from employee);
+
+--51.. Find the total cost of all courier services where the cost is less than the maximum cost 
+select sum(cost) as totalcost
+from courierservices
+where cost < (select max(cost) from courierservices)
+
+--52.Find all couriers that have been paid for
+select * from courier
+where courierid in (select distinct courierid from payment);
+
+--53.Find the locations where the maximum payment amount was made 
+select locationid, max(amount) as maxpayment
+from payment
+group by locationid;
+
+--54. Find all couriers whose weight is greater than the weight of all couriers sent by a specific sender 
+--(e.g., 'SenderName'):  
+select * from courier
+where weight > (select max(weight) from courier where sendername = 'sendername');
+
+
 
 select * from Users
 select * from Courier
