@@ -1,0 +1,2 @@
+C:\Users\LENOVO\Downloads\Banking-System-main\Banking-System-main\obj\Debug\BankingSystem.csproj.AssemblyReference.cache
+C:\Users\LENOVO\Downloads\Banking-System-main\Banking-System-main\obj\Debug\BankingSystem.csproj.CoreCompileInputs.cache
