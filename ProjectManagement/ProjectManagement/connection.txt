@@ -1,0 +1,1 @@
+Server=DESKTOP-HNVF699;Database=ProjectManagement;Trusted_Connection=True;TrustServerCertificate=True;

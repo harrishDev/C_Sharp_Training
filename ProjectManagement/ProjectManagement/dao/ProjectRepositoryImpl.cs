@@ -15,14 +15,14 @@ namespace ProjectManagement.dao
         
         //string connectionString = DBPropertyUtil.GetConnectionString("db.properties");
 
-        string connectionString = "Server=DESKTOP-HNVF699;Database=ProjectManagement;TrustServerCertificate=True;Integrated Security=True;";
+        // string connectionString = "Server=DESKTOP-HNVF699;Database=ProjectManagement;TrustServerCertificate=True;Integrated Security=True;";
         public bool CreateEmployee(Employee emp)
         {
             string query = @"SET IDENTITY_INSERT Employee ON;
                  INSERT INTO Employee (employee_id, name, designation, gender, salary)
                  VALUES (@employee_id, @name, @designation, @gender, @salary);
                  SET IDENTITY_INSERT Employee OFF;";
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = DBConnUtil.GetConnection())
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("@employee_id", emp.Id);
@@ -40,7 +40,7 @@ namespace ProjectManagement.dao
                             INSERT INTO PROJECT (project_id, Projectname, Description, startdate, status)
                             VALUES (@project_id, @Projectname, @Description, @startdate, @status);
                             SET IDENTITY_INSERT Project OFF";
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = DBConnUtil.GetConnection())
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("@project_id", project.Id);
@@ -59,7 +59,7 @@ namespace ProjectManagement.dao
                             INSERT INTO TASK (task_id, task_name, project_id, employee_id, status)
                             VALUES (@task_id, @task_name, @project_id, @employee_id, @status);
                             SET IDENTITY_INSERT Task OFF";
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = DBConnUtil.GetConnection())
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("@task_id", task.TaskId);
@@ -74,7 +74,7 @@ namespace ProjectManagement.dao
         public bool AssignProjectToEmployee(int project_id, int employee_id)
         {
             string query = @"UPDATE EMPLOYEE SET project_id = @project_id WHERE employee_id = @employee_id";
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = DBConnUtil.GetConnection())
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("@project_id", project_id);
@@ -92,7 +92,7 @@ namespace ProjectManagement.dao
         public bool AssignTaskInProjectToEmployee(int task_id, int project_id, int employee_id)
         {
             string query = @"UPDATE TASK SET employee_id = @employee_id WHERE task_id = @task_id";
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = DBConnUtil.GetConnection())
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("@employee_id", employee_id);
@@ -106,7 +106,7 @@ namespace ProjectManagement.dao
         public bool DeleteEmployee(int employeeId)
         {
             string query = @"DELETE FROM EMPLOYEE WHERE employee_id = @employee_id";
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = DBConnUtil.GetConnection())
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("@employee_id", employeeId);
@@ -122,7 +122,7 @@ namespace ProjectManagement.dao
         public bool DeleteProject(int projectId)
         {
             string query = @"DELETE FROM PROJECT WHERE project_id = @project_id";
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = DBConnUtil.GetConnection())
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("@project_id", projectId);
@@ -140,7 +140,7 @@ namespace ProjectManagement.dao
         {
             List<Task> tasks = new List<Task>();
             string query = @"SELECT * FROM TASK WHERE employee_id = @employee_id AND project_id = @project_id";
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = DBConnUtil.GetConnection())
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("@employee_id", employeeId);

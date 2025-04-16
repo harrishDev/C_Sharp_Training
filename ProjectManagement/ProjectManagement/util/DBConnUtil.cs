@@ -11,23 +11,8 @@ namespace ProjectManagement.util
     {
         public static SqlConnection GetConnection()
         {
-            try
-            {
-                string connStr = DBPropertyUtil.GetConnectionString("db.properties");
-
-                if (string.IsNullOrWhiteSpace(connStr))
-                {
-                    throw new InvalidOperationException("Connection string is null or empty.");
-                }
-
-                return new SqlConnection(connStr);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Connection failed: " + ex.Message);
-                return null;
-            }
+            string connectionString = "Server=DESKTOP-HNVF699;Database=ProjectManagement;Trusted_Connection=True;TrustServerCertificate=True;";
+            return new SqlConnection(connectionString);
         }
     }
-
 }
